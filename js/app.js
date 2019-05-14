@@ -291,7 +291,6 @@ const selectCard = index => {
             match--;
         }
     }
-
     isOpen(index);
 
     if(!match) {
@@ -322,3 +321,21 @@ const disappearCards = () => {
     document.querySelectorAll('.game__card>.back')[secondIndex].style.display = 'none';
     document.querySelectorAll('.game__card>.front')[secondIndex].style.display = 'none';
 };
+
+/**----------------------------------------------------------*
+ *                     Keyboard control                      *
+ *-----------------------------------------------------------*/
+const checkKeyPress = key => {
+    if (key.keyCode == '27' || key.keyCode == '88') {
+        popupWindow[n].className = '';
+    }
+    
+    if (key.keyCode == '13' || key.keyCode == '89') {
+        if (n === 0) choiceShirt();
+        if (n === 1) choiceDifficult();
+        if (n === 2) startGame();
+        if (n === 4) submit();
+    }
+};
+
+window.addEventListener('keydown', checkKeyPress, false);
