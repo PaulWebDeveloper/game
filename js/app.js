@@ -6,11 +6,19 @@ const popupWindow = document.querySelectorAll('.pop-up>li');
 const btnClose = document.querySelectorAll('button.close');
 const btnCancel = document.querySelectorAll('button.cancel');
 
+let match = 0;
 let n = 0;
 
 const btnClick = () => {
     btnMenu.forEach((item, i, arr) => {
         item.addEventListener('click', () => {
+            if (match) {
+                popupWindow[i].style.background = 'rgba(40,100,85,0.8)';
+            } 
+            else {
+                popupWindow[i].style.background = 'rgba(0,0,0,0.2)';
+            }
+
             popupWindow[n].className = '';
             popupWindow[i].className = 'show';
             n = i;
@@ -101,8 +109,11 @@ document.querySelector('.pop-up__difficulty .accept').onclick = choiceDifficult;
  *                 Button of menu "New Game"                 *
  *-----------------------------------------------------------*/
 const startGame = () => {
+    stopTimer();
+    match = 0;
     screenGame();
     popupWindow[n].className = '';
+    newGame();
 };
 
 document.querySelector('.start-game').onclick = startGame;
@@ -130,6 +141,39 @@ for (let i = 0; i < names.length; i++) {
 }
 
 document.querySelector('.high-score').innerHTML = out;
+
+const sortPerson = () => {
+    let arr = [];
+
+    for (let i = 0; i < person.length; i++) {
+        arr[i] = person[i].time.split(':');
+    }
+
+    for (let j = arr.length - 1; j > 0; j--) {
+        if (arr[j] < arr[j - 1]) {
+            let t = arr[j];
+            arr[j] = arr[j - 1];
+            arr[j - 1] = t;
+
+            let temp = person[j];
+            person[j] = person[j - 1];
+            person[j - 1] = temp;
+        }
+    }
+};
+
+const addRecord = (name, time) => {
+    out = '';
+
+    person[6] = Object.create(Person).constructor(name,time);
+    sortPerson();
+
+    for (let i = 0; i < person.length; i++) {
+        out += person[i].name + ' ' + person[i].time + '</br>';
+    }
+
+    document.querySelector('.high-score').innerHTML = out;
+};
 
 /**----------------------------------------------------------*
  *                           Timer                           *
@@ -169,4 +213,112 @@ const stopTimer = () => {
 
 const resultTime = () => {
     resultGame = m + ':' + s;
+};
+
+/**----------------------------------------------------------*
+ *                          Victory                          *
+ *-----------------------------------------------------------*/
+const victory = () => {
+    document.querySelector('.time').innerHTML = 'your time ' + resultGame;
+    n = 4;
+    popupWindow[n].className = 'show';
+};
+
+let nickname;
+const submit = () => {
+    nickname = document.getElementById('nickname').value;
+    if (nickname.length) popupWindow[n].className = '';
+    addRecord(nickname, resultGame);
+};
+
+document.querySelector('.submit').onclick = submit;
+
+/**----------------------------------------------------------*
+ *                           Game                            *
+ *-----------------------------------------------------------*/
+let firstOpen;
+let secondOpen;
+let firstIndex = 0;
+let secondIndex = 0;
+let numClick = 0;
+
+const shuffle = cards => {
+    let i = cards.length, j, temp;
+    while(i) {
+        j = Math.floor(Math.random() * i);
+        i -= 1;
+        temp = cards[i];
+        cards[i] = cards[j];
+        cards[j] = temp;
+    }
+};
+
+const newGame = () => {
+    let output = '';
+    match = gameCards.length / 2;
+
+    shuffle(gameCards)
+
+    for (let i = 0; i < gameCards.length; i++) {
+        output += '<div class="game__card">';
+        output += '<div class="back"><img src=\"' + selectedShirt + '\" onclick=\"selectCard(' + i + ')\"></div>';
+        output += '<div class="front"><img src=\"' + gameCards[i] + '\" ></div>';
+        output += '</div>';
+    }
+
+    document.querySelector('.game').innerHTML = output;
+    startTimer();
+};
+
+const selectCard = index => {
+    if (numClick == 0) {
+        isClose(firstIndex);
+        isClose(secondIndex);
+        numClick = 1;
+    }
+    if (numClick == 1) {
+        firstOpen = gameCards[index];
+        firstIndex = index;
+        numClick = 2;
+    } else {
+        secondOpen = gameCards[index];
+        secondIndex = index;
+        numClick = 0;
+
+        if (firstOpen === secondOpen) {
+            isMatch();
+            setTimeout(disappearCards, 300);
+            match--;
+        }
+    }
+
+    isOpen(index);
+
+    if(!match) {
+        stopTimer();
+        resultTime();
+        victory();
+    }
+};
+
+const isOpen = index => {
+    document.querySelectorAll('.game__card>.back')[index].style.transform = 'perspective( 600px ) rotateY( -180deg )';
+    document.querySelectorAll('.game__card>.front')[index].style.transform = 'perspective( 600px ) rotateY( 0deg )';
+};
+
+const isClose = index => {
+    document.querySelectorAll('.game__card>.back')[index].style.transform = 'perspective( 600px ) rotateY( 0deg )';
+    document.querySelectorAll('.game__card>.front')[index].style.transform = 'perspective( 600px ) rotateY( 180deg )';
+};
+
+const isMatch = () => {
+    document.querySelectorAll('.game__card>.front')[firstIndex].style.borderColor = '#95f3b6';
+    document.querySelectorAll('.game__card>.front')[secondIndex].style.borderColor = '#95f3b6';
+};
+
+const disappearCards = () => {
+    document.querySelectorAll('.game__card>.back')[firstIndex].style.display = 'none';
+    document.querySelectorAll('.game__card>.front')[firstIndex].style.display = 'none';
+    document.querySelectorAll('.game__card>.back')[secondIndex].style.display = 'none';
+    document.querySelectorAll('.game__card>.front')[secondIndex].style.display = 'none';
 };

@@ -119,7 +119,8 @@ h2 {
     margin-left: 16px;
 }
 
-button {
+button,
+input.submit {
     width: 180px;
     height: 40px;
     font-size: 16px;
@@ -137,14 +138,16 @@ button {
     margin-right: 15px;
 }
 
-button:hover {
+button:hover,
+input.submit:hover {
     background: #f3df95;
     color: rgba(0,0,0,0.5);
     transition: .3s
 }
 
 button.accept:hover,
-.start-game:hover {
+.start-game:hover,
+input.submit:hover {
     background: #95f3b6;
     border: #95f3b6;
 }
@@ -163,7 +166,8 @@ h3 {
     justify-content: center;
 }
 
-.rules p {
+.rules p,
+.pop-up__victory p {
     background: rgba(0,0,0,0.5);
     border: 2px solid #f3df95;
     border-radius: 5px;
@@ -186,6 +190,42 @@ h3 {
     background: rgba(0,0,0,0.5);
     border: 2px solid #f3df95;
     border-radius: 5px;
-    padding: 10px;
+    padding: 5px 10px 15px 10px;
     margin-bottom: 30px;
+}
+
+.pop-up__victory {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+}
+
+.pop-up__victory p {
+    width: 350px;
+    font-size: 16px;
+    color: #f3df95;
+    padding-bottom: 20px;
+}
+
+form {
+    width: 394px;
+    float: left;
+}
+
+form span {
+    width: 160px;
+    height: 30px;
+    font-size: 19px;
+    color: #f3df95;
+}
+
+#nickname {
+    width: 228px;
+    height: 30px;
+    border: 2px solid #f3df95;
+    border-radius: 3px;
+}
+
+form button.cancel {
+    margin: 30px 29px 0 0;
 }

@@ -1,0 +1,36 @@
+.game {
+    width: 1200px;
+    height: 210px;
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+}
+
+.game__card {
+    width: 144px;
+    height: 205px;
+    margin: 2px;
+    cursor: pointer;
+    float: left;
+}
+
+.back,
+.front {
+    width: 140px;
+    height: 200px;
+    background: #f3df95;
+    border-radius: 3px;
+    border: 2px solid #f3df95;
+    position: absolute;
+    backface-visibility: hidden;
+    transition: transform .2s linear 0s;
+    display: block;
+}
+
+.back {
+    transform: perspective(600px) rotateY(0deg);
+}
+
+.front {
+    transform: perspective(600px) rotateY(180deg);
+}
