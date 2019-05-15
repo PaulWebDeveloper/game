@@ -89,12 +89,11 @@ const checkDifficult = () => {
             quantityCards = 12;
         break;
     }
-
-    newInitialCards = initialCards.slice(0, quantityCards);
-    gameCards = newInitialCards.concat(newInitialCards);
 };
 
 const screenGame = () => {
+    newInitialCards = initialCards.slice(0, quantityCards);
+    gameCards = newInitialCards.concat(newInitialCards);
     document.querySelector('.game').style.width = lengthGameContainer;
 };
 
